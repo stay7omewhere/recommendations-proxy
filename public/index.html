@@ -6,45 +6,42 @@
     <title>FEC Demo</title>
   </head>
   <body>
-    <div id="Photo-Gallery"></div>
-    <div class="topHalf">
-        <img src="https://deployed-service.s3-us-west-1.amazonaws.com/tophalf.png" />
-      </div>
-    <div id="Reservation"></div>
-    <div id="Reviews"></div>
-    <div class="topHalf">
+    <div id="reservation"></div>
+    <div class="fakeImage">
+      <img src="https://deployed-service.s3-us-west-1.amazonaws.com/top.png" />
+    </div>
+    <div id="photo-gallery"></div>
+    <div class="fakeImage">
+      <img src="https://deployed-service.s3-us-west-1.amazonaws.com/middletop.png" />
+    </div>
+    <div id="reviews"></div>
+    <div class="fakeImage">
         <img src="https://deployed-service.s3-us-west-1.amazonaws.com/middle.png" />
       </div>
-    <div id="Recommendations"></div>
-    <div class="topHalf">
+    <div id="recommendations"></div>
+    <div class="fakeImage">
         <img src="https://deployed-service.s3-us-west-1.amazonaws.com/bottom.png" />
       </div>
-<!-- These two lines are just one way to get the React library running in the client's browser -->
-    <!-- <script src="react/umd/react.production.min.js"></script> -->
-    <!-- <script src="react-dom/umd/react-dom.production.min.js"></script> -->
+
     <script src="http://localhost:3001/bundle.js"></script>
     <script src="http://localhost:3002/main.js"></script>
-    <!-- <script src="http://localhost:3003/app.js"></script> -->
+    <script src="http://localhost:3003/bundle.js"></script>
     <script src="http://localhost:3004/main.js"></script>
-    <!-- see: https://reactjs.org/docs/react-without-jsx.html -->
     <script>
       const { React, ReactDOM, App: Recommendations} = RecommendationsModule;
+      console.log(PhotoGallery);
       ReactDOM.render(
         React.createElement(Recommendations),
-        document.getElementById('Recommendations')
+        document.getElementById('recommendations')
       );
       ReactDOM.render(
-        React.createElement(Reservation),
-        document.getElementById('Reservation')
+        React.createElement(Reservations.default),
+        document.getElementById('reservation')
       );
       ReactDOM.render(
         React.createElement(Review),
-        document.getElementById('Reviews')
+        document.getElementById('reviews')
       );
-      // ReactDOM.render(
-      //   React.createElement(Reviews),
-      //   document.getElementById('Reviews')
-      // );
     </script>
   </body>
 </html>
