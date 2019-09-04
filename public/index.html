@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style.css">
+    <title>FEC Demo</title>
+  </head>
+  <body>
+    <div id="Photo-Gallery"></div>
+    <div class="topHalf">
+        <img src="https://deployed-service.s3-us-west-1.amazonaws.com/tophalf.png" />
+      </div>
+    <div id="Reservation"></div>
+    <div id="Reviews"></div>
+    <div class="topHalf">
+        <img src="https://deployed-service.s3-us-west-1.amazonaws.com/middle.png" />
+      </div>
+    <div id="Recommendations"></div>
+    <div class="topHalf">
+        <img src="https://deployed-service.s3-us-west-1.amazonaws.com/bottom.png" />
+      </div>
+<!-- These two lines are just one way to get the React library running in the client's browser -->
+    <!-- <script src="react/umd/react.production.min.js"></script> -->
+    <!-- <script src="react-dom/umd/react-dom.production.min.js"></script> -->
+    <script src="http://localhost:3001/bundle.js"></script>
+    <script src="http://localhost:3002/main.js"></script>
+    <!-- <script src="http://localhost:3003/app.js"></script> -->
+    <script src="http://localhost:3004/main.js"></script>
+    <!-- see: https://reactjs.org/docs/react-without-jsx.html -->
+    <script>
+      const { React, ReactDOM, App: Recommendations} = RecommendationsModule;
+      ReactDOM.render(
+        React.createElement(Recommendations),
+        document.getElementById('Recommendations')
+      );
+      ReactDOM.render(
+        React.createElement(Reservation),
+        document.getElementById('Reservation')
+      );
+      ReactDOM.render(
+        React.createElement(Review),
+        document.getElementById('Reviews')
+      );
+      // ReactDOM.render(
+      //   React.createElement(Reviews),
+      //   document.getElementById('Reviews')
+      // );
+    </script>
+  </body>
+</html>
