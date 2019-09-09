@@ -2,46 +2,179 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/style.css">
     <title>FEC Demo</title>
+    <style type="text/css">
+      @font-face {
+        font-family: 'Arvo';
+        font-display: auto;
+        src: local('Arvo'), url(https://fonts.gstatic.com/s/arvo/v9/rC7kKhY-eUDY-ucISTIf5PesZW2xOQ-xsNqO47m55DA.woff2) format('woff2');
+      }
+      .fakeImage {
+        /* opacity: .5; */
+        filter: blur(5px);
+        overflow-x: hidden;
+        transition: all .1s ease-in-out;
+      }
+      .resWrapper {
+        top: 600px;
+        height: 3900px; 
+        position: absolute;
+      }
+
+      body {    
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      #Photo-Gallery {
+        width: 100%;
+        height: 480px;
+      }
+
+      #reservation {
+        margin-left: 250px;
+        position:sticky; top:100px;
+      }
+
+      #app {
+        display: inline-block;
+        margin-left: 437px;
+        height: 700px;
+        overflow: auto;
+
+      }
+      .client-src-index__component--1IynE {
+        animation: blurIn 0.5s ease;
+      }
+
+      #recommendations {
+        width: 100%;
+        height: 423.156px;
+      }
+
+      .photo {
+        animation: blurIn 0.5s ease;
+      }
+
+      .sc-bRBYWo{
+        animation: blurIn 0.5s ease;
+      }
+
+      .sc-tilXH {
+        animation: blurIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity:0
+        }
+        100% {
+          opacity:1;
+        }
+      }
+
+      @keyframes blurIn {
+        0% {
+          filter: blur(15px);
+        }
+        100% {
+          filter: none;
+        }
+      }
+
+      #bottom {
+        overflow: hidden;
+        height: 1138px;
+        width: 100%;
+      }
+
+      #middletop {
+        overflow: hidden;
+        height: 1972px;
+        width: 100%
+      }
+    </style>
   </head>
   <body>
-    <div id="reservation"></div>
-    <div class="fakeImage">
-      <img src="https://deployed-service.s3-us-west-1.amazonaws.com/top.png" />
+    <div class="resWrapper">
+      <div id="reservation"></div>
+   </div>
+    <div  id="top">
+      <img class="fakeImage" src="https://deployed-service.s3-us-west-1.amazonaws.com/topSmall.webp" 
+        data-src="https://deployed-service.s3-us-west-1.amazonaws.com/top.webp"/>
     </div>
-    <div id="photo-gallery"></div>
-    <div class="fakeImage">
-      <img src="https://deployed-service.s3-us-west-1.amazonaws.com/middletop.png" />
+    <div id="Photo-Gallery"></div>
+    <div  id="middletop">
+      <img class="fakeImage" src="https://deployed-service.s3-us-west-1.amazonaws.com/middletopSmall.webp" 
+        data-src="https://deployed-service.s3-us-west-1.amazonaws.com/middletop.webp"/>
     </div>
-    <div id="reviews"></div>
-    <div class="fakeImage">
-        <img src="https://deployed-service.s3-us-west-1.amazonaws.com/middle.png" />
-      </div>
+    <div id="app"></div>
+    <div  id="middle">
+      <img class="fakeImage" src="https://deployed-service.s3-us-west-1.amazonaws.com/middleSmall.webp" 
+        data-src="https://deployed-service.s3-us-west-1.amazonaws.com/middle.webp"/>
+    </div>
     <div id="recommendations"></div>
-    <div class="fakeImage">
-        <img src="https://deployed-service.s3-us-west-1.amazonaws.com/bottom.png" />
-      </div>
+    <div  id="bottom">
+      <img class="fakeImage" src="https://deployed-service.s3-us-west-1.amazonaws.com/bottomSmall.webp" 
+        data-src="https://deployed-service.s3-us-west-1.amazonaws.com/bottom.webp"/>
+    </div>
+    <script class="reviews" data-src="http://ec2-18-188-168-89.us-east-2.compute.amazonaws.com:3306/main.js"></script>
+    <script class="photos" data-src="http://ec2-13-57-228-44.us-west-1.compute.amazonaws.com:3001/bundle.js"></script>
+    <script class="recommendations" src="https://deployed-service.s3-us-west-1.amazonaws.com/public/main.br.js"></script>
+    <script class="reservations" src="http://18.219.238.14:3002/bundle.js"></script>
 
-    <script src="http://localhost:3001/bundle.js"></script>
-    <script src="http://localhost:3002/main.js"></script>
-    <script src="http://localhost:3003/bundle.js"></script>
-    <script src="http://localhost:3004/main.js"></script>
     <script>
       const { React, ReactDOM, App: Recommendations} = RecommendationsModule;
-      console.log(PhotoGallery);
-      ReactDOM.render(
-        React.createElement(Recommendations),
-        document.getElementById('recommendations')
-      );
-      ReactDOM.render(
-        React.createElement(Reservations.default),
-        document.getElementById('reservation')
-      );
-      ReactDOM.render(
-        React.createElement(Review),
-        document.getElementById('reviews')
-      );
+      
+      document.addEventListener("DOMContentLoaded", function() {
+        if(window.Reservations) {
+          ReactDOM.render(
+            React.createElement(Reservations.default),
+            document.getElementById('reservation')
+          );
+        }
+        document.querySelector('.photos').src = document.querySelector('.photos').dataset.src; 
+        document.querySelector('.reviews').src = document.querySelector('.reviews').dataset.src; 
+
+        var lazyImages = [].slice.call(document.querySelectorAll("img.fakeImage"));
+        console.log(lazyImages)
+
+        if ("IntersectionObserver" in window) {
+          let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting) {
+                let lazyImage = entry.target;
+                lazyImage.style = "filter: none";
+                lazyImage.src = lazyImage.dataset.src;
+                lazyImageObserver.unobserve(lazyImage);
+              }
+            });
+          });
+
+          lazyImages.forEach(function(lazyImage) {
+            lazyImageObserver.observe(lazyImage);
+          });
+
+          let lazyComponentObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting) {
+                let lazyComponent = entry.target;
+                ReactDOM.render(
+                  React.createElement(Recommendations),
+                  document.getElementById('recommendations')
+                );
+                lazyComponentObserver.unobserve(rec);
+              }
+            });
+          })
+          let rec = document.querySelector('#recommendations');
+          console.log(rec);
+          lazyComponentObserver.observe(rec);
+
+        } else {
+          // Possibly fall back to a more compatible method here
+        }
+      });
     </script>
   </body>
 </html>
